@@ -1,0 +1,60 @@
+{
+  "version": 2,
+  "projects": {
+    "stack-flow": {
+      "root": "apps/stack-flow",
+      "sourceRoot": "apps/stack-flow/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/stack-flow",
+            "main": "apps/stack-flow/src/main.ts",
+            "tsConfig": "apps/stack-flow/tsconfig.app.json",
+            "assets": ["apps/stack-flow/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/stack-flow/src/environments/environment.ts",
+                  "with": "apps/stack-flow/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "stack-flow:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/stack-flow/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/stack-flow"],
+          "options": {
+            "jestConfig": "apps/stack-flow/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/nest"
+  },
+  "defaultProject": "stack-flow"
+}
