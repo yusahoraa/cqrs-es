@@ -1,0 +1,59 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package Commands {
+  class CreatePostCommand {
+    execute(userId: int, description: string) : string;
+  }
+
+  class LikePostCommand {
+    execute(userId: int, postId: string): void;
+  }
+}
+
+package Queries {
+  class GetFavoritePostQuery {
+    execute(): List<ReadPost>
+  }
+}
+
+package WriteRepository {
+  class WriteRepo {
+    save(post: WritePost): void
+    get(id: string): WritePost
+    getByLike(): List<ReadPost>
+  }
+
+  class WritePost {
+    id: string
+    content: string
+    createdBy : int
+  }
+
+  class Like {
+    userId
+  }
+
+  WritePost *- Like
+}
+
+
+package ReadRepository {
+  class ReadRepo {
+    getByLike(): List<ReadPost>
+  }
+
+  class ReadPost {
+    description: string
+    nbLikes: int
+  }
+}
+
+CreatePostCommand --> WriteRepo
+LikePostCommand --> WriteRepo
+
+GetFavoritePostQuery --> ReadRepo
+
+WriteRepository -> ReadRepository : ??
+
+@enduml
