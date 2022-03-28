@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GetFavoritePostQueryService } from './get-favorite-post-query.service';
-import { PostReadWriteRepositoryService } from '../../repositories/post-read-write-repository.service';
+import { PostWriteRepositoryService } from '../../repositories/post-write-repository.service';
 import { ReadablePost } from './model/queries-model';
 
 describe('GetFavoritePostQueryService', () => {
-  let repo: PostReadWriteRepositoryService;
+  let repo: PostWriteRepositoryService;
   let service: GetFavoritePostQueryService;
 
   beforeEach(async () => {
-    repo = new PostReadWriteRepositoryService();
+    repo = new PostWriteRepositoryService();
     service = new GetFavoritePostQueryService(repo);
   });
 

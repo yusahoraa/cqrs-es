@@ -54,6 +54,6 @@ LikePostCommand --> WriteRepo
 
 GetFavoritePostQuery --> ReadRepo
 
-WriteRepository -> ReadRepository : ??
+WriteRepository -> ReadRepository : "Handler + eventBus"
 
 @enduml

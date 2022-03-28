@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { PostReadWriteRepositoryService } from '../../repositories/post-read-write-repository.service';
+import { PostWriteRepositoryService } from '../../repositories/post-write-repository.service';
+import { DomainEvent, EventBus } from './model/domain.event';
 
 @Injectable()
 export class LikePostCommandService {
-  constructor(private repo: PostReadWriteRepositoryService) {
+  constructor(private repo: PostWriteRepositoryService, private eventBus: EventBus) {
 
   }
 
@@ -20,5 +21,6 @@ export class LikePostCommandService {
     }
     post.likes.push({userId: userIdAsStr.toString()});
     this.repo.save(post);
+    this.eventBus.publish(new DomainEvent("NEW_LIKE", postId));
   }
 }

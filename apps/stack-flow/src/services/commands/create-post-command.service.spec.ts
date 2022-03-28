@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreatePostCommandService } from './create-post-command.service';
-import { PostReadWriteRepositoryService } from '../../repositories/post-read-write-repository.service';
+import { PostWriteRepositoryService } from '../../repositories/post-write-repository.service';
 
 describe('CreatePostCommandService', () => {
-  let repo: PostReadWriteRepositoryService;
+  let repo: PostWriteRepositoryService;
   let service: CreatePostCommandService;
 
 
   beforeEach(async () => {
-    repo = new PostReadWriteRepositoryService();
+    repo = new PostWriteRepositoryService();
     service = new CreatePostCommandService(repo);
   });
 

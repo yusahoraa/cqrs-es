@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { PostReadWriteRepositoryService } from '../../repositories/post-read-write-repository.service';
 import { ReadablePost } from './model/queries-model';
+import { PostReadRepository } from '../../repositories/post-read-repository';
 
 @Injectable()
 export class GetFavoritePostQueryService {
-  constructor(private repo: PostReadWriteRepositoryService) {
+  constructor(private repo: PostReadRepository) {
   }
 
   execute(): ReadablePost[] {
-    return this.repo.getByLikes();
+    return this.repo.getByLike();
   }
 }

@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LikePostCommandService } from './like-post-command.service';
-import { PostReadWriteRepositoryService } from '../../repositories/post-read-write-repository.service';
+import { PostWriteRepositoryService } from '../../repositories/post-write-repository.service';
 
 describe('LikePostCommandService', () => {
-  let repo: PostReadWriteRepositoryService;
+  let repo: PostWriteRepositoryService;
   let service: LikePostCommandService;
 
   beforeEach(async () => {
-    repo = new PostReadWriteRepositoryService();
+    repo = new PostWriteRepositoryService();
     service = new LikePostCommandService(repo);
   });
 

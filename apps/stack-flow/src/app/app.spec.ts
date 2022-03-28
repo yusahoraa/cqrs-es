@@ -1,10 +1,16 @@
-import { PostReadWriteRepositoryService } from '../repositories/post-read-write-repository.service';
+import { PostWriteRepositoryService } from '../repositories/post-write-repository.service';
 import { CreatePostCommandService } from '../services/commands/create-post-command.service';
 import { LikePostCommandService } from '../services/commands/like-post-command.service';
 import { GetFavoritePostQueryService } from '../services/queries/get-favorite-post-query.service';
+import { PostReadRepository } from '../repositories/post-read-repository';
+import { EventBus } from '../services/commands/model/domain.event';
+import { PostHandler } from '../services/handler/post-handler';
 
 describe('integration', () => {
-  let repo: PostReadWriteRepositoryService;
+  let eventBus: EventBus;
+  let handler: PostHandler;
+  let writeRepo: PostWriteRepositoryService;
+  let readRepo: PostReadRepository;
   let createCommand : CreatePostCommandService;
   let likeCommand: LikePostCommandService;
   let query: GetFavoritePostQueryService;
@@ -14,10 +20,18 @@ describe('integration', () => {
   const carol =  789;
 
   beforeEach(() => {
-    repo = new PostReadWriteRepositoryService();
-    createCommand = new CreatePostCommandService(repo);
-    likeCommand = new LikePostCommandService(repo);
-    query = new GetFavoritePostQueryService(repo);
+    eventBus = new EventBus();
+
+    writeRepo = new PostWriteRepositoryService();
+    readRepo = new PostReadRepository();
+
+    handler = new PostHandler(readRepo);
+    createCommand = new CreatePostCommandService(writeRepo, eventBus);
+    likeCommand = new LikePostCommandService(writeRepo, eventBus);
+    query = new GetFavoritePostQueryService(readRepo);
+
+    eventBus.subscribe(handler);
+
   });
 
   it('should work', () => {
