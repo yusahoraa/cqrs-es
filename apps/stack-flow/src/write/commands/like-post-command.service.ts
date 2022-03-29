@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PostWriteRepositoryService } from '../post-write-repository.service';
 import { DomainEvent } from '../../synchro/core/domain.event';
 import { EventBus } from '../../synchro/core/event-bus';
-import { PostLike } from './model/commands-model';
+import { ExistingPost } from './model/existing-post';
 
 @Injectable()
 export class LikePostCommand {
@@ -43,24 +43,5 @@ export class LikePostCommand {
     userIdAsStr: string
   ) {
     return existingPost.createdBy === userIdAsStr;
-  }
-}
-
-class ExistingPost {
-  description: string;
-  likes: PostLike[] = [];
-  createdBy: string;
-
-  constructor(events: DomainEvent[]) {
-    events.forEach((e) => {
-      if (e.eventType === 'CREATED_POST') {
-        const content = e.content as any;
-        this.description = content.description;
-        this.createdBy = content.createdBy;
-      } else if (e.eventType === 'NEW_LIKE') {
-        const content = e.content as any;
-        this.likes.push({ userId: content.userId });
-      }
-    });
   }
 }

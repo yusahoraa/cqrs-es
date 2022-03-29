@@ -16,16 +16,24 @@ export class PostReadRepository {
   }
 
   addLike(id: string) {
-    this.posts = this.posts.map(p => {
-      if (p.id === id) {
-        p.nbLikes++;
-      }
-      return p;
-    });
-    this.sort();
+    this.setLike(id, 1);
   }
 
   private sort() {
     return this.posts.sort((a, b) => b.nbLikes - a.nbLikes);
+  }
+
+  removeLike(postId: string) {
+    this.setLike(postId, -1);
+  }
+
+  private setLike(postId: string, nbLikes: number) {
+    this.posts = this.posts.map((p) => {
+      if (p.id === postId) {
+        p.nbLikes += nbLikes;
+      }
+      return p;
+    });
+    this.sort();
   }
 }
