@@ -1,14 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { GetFavoritePostQuery } from './get-favorite-post-query.service';
-import { PostWriteRepositoryService } from '../../write/post-write-repository.service';
 import { ReadablePost } from './model/queries-model';
+import { PostReadRepository } from '../post-read-repository';
 
 describe('GetFavoritePostQueryService', () => {
-  let repo: PostWriteRepositoryService;
+  let repo: PostReadRepository;
   let service: GetFavoritePostQuery;
 
   beforeEach(async () => {
-    repo = new PostWriteRepositoryService();
+    repo = new PostReadRepository();
     service = new GetFavoritePostQuery(repo);
   });
 
@@ -17,11 +16,19 @@ describe('GetFavoritePostQueryService', () => {
   });
 
   it('should retrieve post order by the most likes', () => {
-    repo.save({id: '123', likes: [{userId: '456'}], description: "world!", createdBy: null});
-    repo.save({id: 'abc', likes: [{userId: '456'}, {userId: '789'}], description: "hello", createdBy: null});
+    repo.insert({
+      id: '123',
+      description: 'world!',
+      nbLikes: 1,
+    });
+    repo.insert({
+      id: '234',
+      description: 'hello',
+      nbLikes: 2,
+    });
 
     const response: ReadablePost[] = service.execute();
     expect(response).toHaveLength(2);
     expect(response[0].description).toBe('hello');
-  })
+  });
 });
