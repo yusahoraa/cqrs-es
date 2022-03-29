@@ -53,9 +53,7 @@ package Write {
       get(id: string): WritePost
       getByLike(): List<ReadPost>
     }
-
   }
-
 }
 
 package Synchro {
