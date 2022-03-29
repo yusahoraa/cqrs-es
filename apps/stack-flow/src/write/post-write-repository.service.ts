@@ -1,22 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { WritePost } from './commands/model/commands-model';
-import {v4 as uuidV4} from 'uuid';
+import { DomainEvent } from '../synchro/core/domain.event';
 
 /**
  * Se comporte comme la base de données
  */
 @Injectable()
 export class PostWriteRepositoryService {
-  private allPosts = new Map<string, WritePost>();
+  private allPostEvents = new Map<string, DomainEvent[]>();
 
-  save(post: WritePost) {
-    if (!post.id) {
-      post.id = uuidV4();
-    }
-    this.allPosts.set(post.id, post);
+  addEvent(postId: string, event: DomainEvent) {
+    const postEvents = this.allPostEvents.get(postId) ?? [];
+    postEvents.push(event);
+    this.allPostEvents.set(postId, postEvents);
   }
 
-  get(id: string): WritePost {
-    return this.allPosts.get(id);
+  getEvents(postId: string): DomainEvent[] {
+    return this.allPostEvents.get(postId) ?? [];
   }
 }

@@ -7,6 +7,7 @@ export class NewLikeHandler implements IHandler {
 
   handle(event: DomainEvent): void {
     if (event.eventType !== 'NEW_LIKE') return;
-    this.readRepo.addLike(event.content as string);
+    const content = event.content as any;
+    this.readRepo.addLike(content.postId as string);
   }
 }

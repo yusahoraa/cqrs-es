@@ -49,9 +49,8 @@ package Write {
 
   package WriteRepository {
     class WriteRepo {
-      save(post: WritePost): void
-      get(id: string): WritePost
-      getByLike(): List<ReadPost>
+      addEvent(event: DomainEvent): void
+      getEvents(id: string): DomainEvent[]
     }
 
   }
@@ -69,13 +68,14 @@ package Synchro {
   }
 }
 
-CreatePostCommand --> WriteRepo
-LikePostCommand --> WriteRepo
+CreatePostCommand --> WriteRepo : "addEvent('CREATED_POST', {id: x, descr: hello})"
+LikePostCommand --> WriteRepo : "addEvent('NEW_LIKE', {userId: 123, id: x})"
 
 GetFavoritePostQuery --> ReadRepo
 
 CreatePostCommand --> EventBus : "Event: CREATED_POST"
 LikePostCommand --> EventBus : "Event: NEW_LIKE"
+LikePostCommand -> LikePostCommand : "Check rules"
 PostHandler --> EventBus : "Subscribe"
 PostHandler --> ReadRepo : "Update"
 
