@@ -64,8 +64,12 @@ package Synchro {
     publish(event: DomainEvent)
   }
 
-  class PostHandler {
-    doIt(event: DomainEvent)
+  class NewPostHandler {
+    handle(event: DomainEvent)
+  }
+
+  class NewLikeHandler {
+    handle(event: DomainEvent)
   }
 }
 
@@ -76,7 +80,10 @@ GetFavoritePostQuery --> ReadRepo
 
 CreatePostCommand --> EventBus : "Event: CREATED_POST"
 LikePostCommand --> EventBus : "Event: NEW_LIKE"
-PostHandler --> EventBus : "Subscribe"
-PostHandler --> ReadRepo : "Update"
+NewPostHandler --> EventBus : "Subscribe"
+NewPostHandler --> ReadRepo : "Update"
+NewLikeHandler --> EventBus : "Subscribe"
+NewLikeHandler --> ReadRepo : "Update"
+
 
 @enduml
