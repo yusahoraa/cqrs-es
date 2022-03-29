@@ -27,6 +27,9 @@
     ]
   },
   "projects": {
+    "client-management": {
+      "tags": []
+    },
     "stack-flow": {
       "tags": []
     }

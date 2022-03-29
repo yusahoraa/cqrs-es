@@ -1,6 +1,57 @@
 {
   "version": 2,
   "projects": {
+    "client-management": {
+      "root": "apps/client-management",
+      "sourceRoot": "apps/client-management/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/client-management",
+            "main": "apps/client-management/src/main.ts",
+            "tsConfig": "apps/client-management/tsconfig.app.json",
+            "assets": ["apps/client-management/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/client-management/src/environments/environment.ts",
+                  "with": "apps/client-management/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "client-management:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/client-management/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/client-management"],
+          "options": {
+            "jestConfig": "apps/client-management/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "stack-flow": {
       "root": "apps/stack-flow",
       "sourceRoot": "apps/stack-flow/src",
