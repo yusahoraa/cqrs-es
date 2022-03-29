@@ -1,13 +1,14 @@
-import { PostReadRepository } from '../../repositories/post-read-repository';
-import { DomainEvent } from '../commands/model/domain.event';
-import { WritePost } from '../commands/model/commands-model';
+import { PostReadRepository } from '../../read/post-read-repository';
+import { DomainEvent } from '../core/domain.event';
+import { WritePost } from '../../write/commands/model/commands-model';
+import { IHandler } from '../core/event-bus';
 
-export class PostHandler {
+export class PostHandler implements IHandler {
 
   constructor(private readRepo: PostReadRepository) {
   }
 
-  doIt(event: DomainEvent) {
+  handle(event: DomainEvent) {
     if (event.eventType === "CREATED_POST") {
       const content = event.content as WritePost;
       this.readRepo.insert({ id: content.id, nbLikes: 0, description: content.description });

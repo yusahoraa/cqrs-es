@@ -1,5 +1,8 @@
-import { ReadablePost } from '../services/queries/model/queries-model';
+import { ReadablePost } from './queries/model/queries-model';
 
+/**
+ * Base de données en lecture
+ */
 export class PostReadRepository {
   private posts: ReadablePost[] = [];
 

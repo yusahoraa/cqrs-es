@@ -1,19 +1,19 @@
-import { PostWriteRepositoryService } from '../repositories/post-write-repository.service';
-import { CreatePostCommandService } from '../services/commands/create-post-command.service';
-import { LikePostCommandService } from '../services/commands/like-post-command.service';
-import { GetFavoritePostQueryService } from '../services/queries/get-favorite-post-query.service';
-import { PostReadRepository } from '../repositories/post-read-repository';
-import { EventBus } from '../services/commands/model/domain.event';
-import { PostHandler } from '../services/handler/post-handler';
+import { PostWriteRepositoryService } from '../write/post-write-repository.service';
+import { CreatePostCommand } from '../write/commands/create-post-command.service';
+import { LikePostCommand } from '../write/commands/like-post-command.service';
+import { GetFavoritePostQuery } from '../read/queries/get-favorite-post-query.service';
+import { PostReadRepository } from '../read/post-read-repository';
+import { PostHandler } from '../synchro/handlers/post-handler';
+import { EventBus } from '../synchro/core/event-bus';
 
 describe('integration', () => {
   let eventBus: EventBus;
   let handler: PostHandler;
   let writeRepo: PostWriteRepositoryService;
   let readRepo: PostReadRepository;
-  let createCommand : CreatePostCommandService;
-  let likeCommand: LikePostCommandService;
-  let query: GetFavoritePostQueryService;
+  let createPostCommand : CreatePostCommand;
+  let likeCommand: LikePostCommand;
+  let query: GetFavoritePostQuery;
 
   const alice = 456;
   const bob = 123
@@ -26,24 +26,24 @@ describe('integration', () => {
     readRepo = new PostReadRepository();
 
     handler = new PostHandler(readRepo);
-    createCommand = new CreatePostCommandService(writeRepo, eventBus);
-    likeCommand = new LikePostCommandService(writeRepo, eventBus);
-    query = new GetFavoritePostQueryService(readRepo);
+    createPostCommand = new CreatePostCommand(writeRepo, eventBus);
+    likeCommand = new LikePostCommand(writeRepo, eventBus);
+    query = new GetFavoritePostQuery(readRepo);
 
     eventBus.subscribe(handler);
 
   });
 
   it('should work', () => {
-    const helloId = createCommand.execute(bob, "Hello");
-    const worldId = createCommand.execute(bob, " world!");
+    const helloId = createPostCommand.execute(bob, "Hello");
+    const worldId = createPostCommand.execute(bob, " world!");
 
     likeCommand.execute(alice, helloId);
     likeCommand.execute(alice, worldId);
 
     likeCommand.execute(carol, worldId);
 
-    const response = query.execute();
+    const response = query.execute();                         // <------- ULTRA RAPIDE
     expect(response).toHaveLength(2);
     expect(response[0].description).toBe(' world!');
 

@@ -1,15 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreatePostCommandService } from './create-post-command.service';
-import { PostWriteRepositoryService } from '../../repositories/post-write-repository.service';
+import { CreatePostCommand } from './create-post-command.service';
+import { PostWriteRepositoryService } from '../post-write-repository.service';
+import { EventBus } from '../../synchro/core/event-bus';
 
 describe('CreatePostCommandService', () => {
   let repo: PostWriteRepositoryService;
-  let service: CreatePostCommandService;
+  let eventBus: EventBus
+  let service: CreatePostCommand;
 
 
   beforeEach(async () => {
     repo = new PostWriteRepositoryService();
-    service = new CreatePostCommandService(repo);
+    eventBus = new EventBus();
+    service = new CreatePostCommand(repo, eventBus);
   });
 
   it('should be defined', () => {

@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { PostWriteRepositoryService } from '../../repositories/post-write-repository.service';
+import { PostWriteRepositoryService } from '../post-write-repository.service';
 import { WritePost } from './model/commands-model';
-import { DomainEvent, EventBus } from './model/domain.event';
+import { DomainEvent} from '../../synchro/core/domain.event';
+import { EventBus } from '../../synchro/core/event-bus';
 
 @Injectable()
-export class CreatePostCommandService {
+export class CreatePostCommand {
 
   constructor(private repo: PostWriteRepositoryService,
               private eventBus: EventBus) {
@@ -19,3 +20,4 @@ export class CreatePostCommandService {
     return post.id;
   }
 }
+

@@ -1,51 +1,71 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-package Commands {
-  class CreatePostCommand {
-    execute(userId: int, description: string) : string;
+package Read {
+  package Queries {
+    class GetFavoritePostQuery {
+      execute(): List<ReadPost>
+    }
   }
 
-  class LikePostCommand {
-    execute(userId: int, postId: string): void;
+  package ReadModel {
+    class ReadPost {
+      description: string
+      nbLikes: int
+    }
+  }
+
+  package ReadRepository {
+    class ReadRepo {
+      getByLike(): List<ReadPost>
+    }
   }
 }
 
-package Queries {
-  class GetFavoritePostQuery {
-    execute(): List<ReadPost>
+package Write {
+  package Commands {
+    class CreatePostCommand {
+      execute(userId: int, description: string) : string;
+    }
+
+    class LikePostCommand {
+      execute(userId: int, postId: string): void;
+    }
   }
+
+  package WriteModel {
+    class WritePost {
+      id: string
+      content: string
+      createdBy : int
+    }
+
+    class Like {
+      userId
+    }
+
+    WritePost *- Like
+  }
+
+  package WriteRepository {
+    class WriteRepo {
+      save(post: WritePost): void
+      get(id: string): WritePost
+      getByLike(): List<ReadPost>
+    }
+
+  }
+
 }
 
-package WriteRepository {
-  class WriteRepo {
-    save(post: WritePost): void
-    get(id: string): WritePost
-    getByLike(): List<ReadPost>
+package Synchro {
+  class EventBus {
+    subscribe(handler : Handler)
+    publish(event: DomainEvent)
   }
 
-  class WritePost {
-    id: string
-    content: string
-    createdBy : int
-  }
-
-  class Like {
-    userId
-  }
-
-  WritePost *- Like
-}
-
-
-package ReadRepository {
-  class ReadRepo {
-    getByLike(): List<ReadPost>
-  }
-
-  class ReadPost {
-    description: string
-    nbLikes: int
+  class PostHandler {
+    doIt(event: DomainEvent)
   }
 }
 
@@ -54,6 +74,9 @@ LikePostCommand --> WriteRepo
 
 GetFavoritePostQuery --> ReadRepo
 
-WriteRepository -> ReadRepository : "Handler + eventBus"
+CreatePostCommand --> EventBus : "Event: CREATED_POST"
+LikePostCommand --> EventBus : "Event: NEW_LIKE"
+PostHandler --> EventBus : "Subscribe"
+PostHandler --> ReadRepo : "Update"
 
 @enduml

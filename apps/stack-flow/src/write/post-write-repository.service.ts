@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { WritePost } from '../services/commands/model/commands-model';
+import { WritePost } from './commands/model/commands-model';
 import {v4 as uuidV4} from 'uuid';
 
 /**
