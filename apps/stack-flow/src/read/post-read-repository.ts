@@ -1,8 +1,10 @@
 import { ReadablePost } from './queries/model/queries-model';
+import { Injectable } from '@nestjs/common';
 
 /**
  * Base de données en lecture
  */
+@Injectable()
 export class PostReadRepository {
   private posts: ReadablePost[] = [];
 
@@ -16,7 +18,7 @@ export class PostReadRepository {
   }
 
   addLike(id: string) {
-    this.posts = this.posts.map(p => {
+    this.posts = this.posts.map((p) => {
       if (p.id === id) {
         p.nbLikes++;
       }

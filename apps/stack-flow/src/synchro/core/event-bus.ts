@@ -1,9 +1,11 @@
 import { DomainEvent } from './domain.event';
+import { Injectable } from '@nestjs/common';
 
 export interface IHandler {
   handle(event: DomainEvent): void;
 }
 
+@Injectable()
 export class EventBus {
   private subscribers = [];
 
