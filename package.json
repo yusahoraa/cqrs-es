@@ -6,7 +6,8 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "nx":"nx"
+    "nx":"nx",
+    "heroku-postbuild": "nx build $PROJECT_NAME --prod"
   },
   "private": true,
   "dependencies": {
